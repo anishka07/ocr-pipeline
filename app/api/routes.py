@@ -15,16 +15,17 @@ router = APIRouter()
 @router.post("/extract/")
 async def extract_data(
     file: UploadFile = File(...),
-    document_type: str = Form(...),
+    document_type: DocumentType = Form(...),
     ocr_type: OCRType = Form(...)
 ):
     # Save uploaded file
     temp_filename = f"{uuid.uuid4()}.pdf"
     temp_file_save_path = PathSettings.TEMP_FILE_DIR / temp_filename
+    print(temp_file_save_path)
     with open(temp_file_save_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    processor = OCRProcessor(pdf_name=temp_filename)
+    processor = OCRProcessor(pdf_name=temp_file_save_path)
     document_info = processor.process_with_factory(
         document_type=DocumentType(document_type),
         ocr_type=ocr_type
@@ -32,6 +33,4 @@ async def extract_data(
 
     temp_file_save_path.unlink(missing_ok=True)
 
-    return JSONResponse(
-        content={"fields": [field.dict() for field in document_info.fields]}
-    )
+    return JSONResponse(content={"llm_response": document_info})

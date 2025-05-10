@@ -13,4 +13,6 @@ wheels/
 logs
 output
 .idea
+pdfstemp
+temp
 pdfs

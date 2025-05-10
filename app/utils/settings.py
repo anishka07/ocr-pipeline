@@ -13,3 +13,6 @@ class PathSettings:
 
 class Constants:
     GEMINI_PROMPT: str = "This is the content from a w9 form: {}, i want you to extract all the relevant field values from this form and return them in a json format. Don't add any extra logic to your response."
+
+
+print(PathSettings.TEMP_FILE_DIR)

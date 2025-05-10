@@ -8,10 +8,10 @@ from app.utils.preprocess_pdf import PDFPreProcessor
 from app.utils.response import gemini_response
 
 
-class OCRExtractionStrategy(ExtractionStrategy):
+class TesseractExtractionStrategy(ExtractionStrategy):
 
     def __init__(self):
-        self.logger = get_custom_logger(name="OCRExtractionStrategy")
+        self.logger = get_custom_logger(name="TesseractExtractionStrategy")
 
     def extract_from_file(self, pdf_path, dpi: int = 300) -> DocumentInfo:
         preprocessor = PDFPreProcessor(pdf_path=pdf_path, dpi=dpi)
@@ -30,9 +30,5 @@ class OCRExtractionStrategy(ExtractionStrategy):
         full_text = " ".join(all_text).replace("v|", "[*]")
         response = gemini_response(context=full_text)
 
-        fields = [
-            DocumentField(name=key, value=value)
-            for key, value in response.items()
-        ]
-        return DocumentInfo(fields=fields)
+        return response
 

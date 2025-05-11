@@ -15,3 +15,7 @@ output
 pdfstemp
 temp
 .DS_Store
+.env
+pdfs
+logs
+output

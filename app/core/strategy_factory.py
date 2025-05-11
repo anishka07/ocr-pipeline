@@ -1,8 +1,8 @@
 from app.models.document import DocumentType
 from app.models.request import OCRType
-from app.src.base import ExtractionStrategy
+from app.src.base import OCRStrategy
 from app.src.tesseract_text_extractor import TesseractExtractionStrategy
-from app.src.easy_ocr_extractor import EasyOCRExtractionStrategy
+from app.src.easyocr_text_extractor import EasyOCRExtractionStrategy
 
 
 class ExtractionStrategyFactory:
@@ -11,11 +11,11 @@ class ExtractionStrategyFactory:
             self,
             document_type: DocumentType,
             ocr_type: OCRType,
-    ) ->  ExtractionStrategy:
+    ) ->  OCRStrategy:
         if document_type == DocumentType.W9:
             if ocr_type == OCRType.tesseract:
                 return TesseractExtractionStrategy()
-            elif ocr_type == OCRType.regex:
+            elif ocr_type == OCRType.easyocr:
                 return EasyOCRExtractionStrategy()
 
         raise ValueError("Invalid engine type or document type combination.")

@@ -1,15 +1,19 @@
-import os
-import shutil
-import tempfile
+import json
+from pathlib import Path
+from tempfile import NamedTemporaryFile
 
-from fastapi import APIRouter, UploadFile, File, Form
+from fastapi import APIRouter, UploadFile, File, Form, status
 from fastapi.responses import JSONResponse
 
 from app.core.ocr_processor import OCRProcessor
 from app.models.document import DocumentType
-from app.models.request import OCRType
+from app.models.request import OCRType, OCRResponse
+from app.utils.logger import get_custom_logger
+from app.utils.response import gemini_response
 
 router = APIRouter()
+
+logger = get_custom_logger(__name__)
 
 
 @router.get("/")
@@ -27,25 +31,28 @@ async def extract_data(
         file: UploadFile = File(...),
         document_type: DocumentType = Form(...),
         ocr_type: OCRType = Form(...)
-):
+) ->  OCRResponse:
     try:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
-            shutil.copyfileobj(file.file, tmp)
-            temp_filename = tmp.name
-        await file.close()
+        suffix = Path(file.filename).suffix if file.filename else ".pdf"
+        with NamedTemporaryFile(delete=True, suffix=suffix) as temp_file:
+            contents = await file.read()
+            temp_file.write(contents)
+            temp_path = temp_file.name
 
-        processor = OCRProcessor(pdf_name=temp_filename)
-        document_info = processor.process_with_factory(
-            document_type=document_type,
-            ocr_type=ocr_type
-        )
+            processor = OCRProcessor(pdf_name=temp_path)
+            ocr_info = processor.process_with_factory(
+                document_type=document_type,
+                ocr_type=ocr_type
+            )
+            document_info = gemini_response(context=ocr_info, schema=OCRResponse.model_json_schema())
 
-        return JSONResponse(content={"Field_data": document_info.dict()})
+            document_info = json.loads(document_info)
+
+        return document_info
+
     except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
-    finally:
-        try:
-            if temp_filename and os.path.exists(temp_filename):
-                os.remove(temp_filename)
-        except Exception:
-            pass
+        logger.error(f"Error processing document: {str(e)}")
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"error": str(e)}
+        )

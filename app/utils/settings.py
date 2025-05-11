@@ -11,20 +11,18 @@ class PathSettings:
 
 
 class Constants:
-    GEMINI_PROMPT: str = """
-    This is the text extracted from a PDF form:
-    {}
-    Extract in this format: 
-    {{
-        "Name": ,
-        "College": ,
-        "Federal Tax Classification": ,
-        "Exempt payee code": ,
-        "FATCA reporting code": ,
-        "Address": ,
-        "city_state_zip": ,
-        "social_security_number": ,
-        "employer_identification": ,
-    }}
-    If any are missing, fill the field with None
-    """
+    GEMINI_PROMPT: str = """Extract the following details from the provided PDF form text:
+            {}
+            
+            The schema of Json should be:
+            
+            {}
+            
+            Provide the extracted data in valid JSON format with double-quoted keys and string values.
+            
+            If any field is missing or cannot be extracted, set its value to null.
+            
+            Return only the JSON object — DO NOT include any markdown formatting (no triple backticks, no extra text).
+"""
+
+

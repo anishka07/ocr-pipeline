@@ -7,20 +7,20 @@ from app.utils.logger import get_custom_logger
 
 
 class PDFPreProcessor:
-
     def __init__(self, pdf_path: Path, dpi: int = 300):
         self.dpi = dpi
         self.pdf_path = pdf_path
         self.logger = get_custom_logger(name="PDFPreProcessor")
-        
+
     def convert_pdf_to_images(self):
         self.logger.info(f"Converting PDF to images at {self.dpi} dpi.")
         return convert_from_path(self.pdf_path, dpi=self.dpi)
 
     def remove_lines(self, image):
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        binary = cv2.adaptiveThreshold(~gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
-                                    cv2.THRESH_BINARY, 15, -2)
+        binary = cv2.adaptiveThreshold(
+            ~gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 15, -2
+        )
         # Detect horizontal lines
         horizontal = binary.copy()
         h_size = horizontal.shape[1] // 30
@@ -41,5 +41,3 @@ class PDFPreProcessor:
         # Inpaint original image for color restoration
         inpainted = cv2.inpaint(image, mask, 3, cv2.INPAINT_TELEA)
         return cleaned_final, inpainted
-
-

@@ -7,5 +7,3 @@ class DocumentType(str, Enum):
     W2 = "w2"  # Prepared for future extension
     INVOICE = "invoice"  # Prepared for future extension
     GENERIC = "generic"  # Fallback for unknown document types
-
-

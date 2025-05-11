@@ -6,7 +6,6 @@ from app.utils.settings import PathSettings
 
 
 class OCRProcessor:
-
     def __init__(self, pdf_name: str, dpi: int = 300):
         self.logger = get_custom_logger("OCRProcessor")
         self.logger.info("OCRProcessor initialized.")
@@ -16,9 +15,9 @@ class OCRProcessor:
         self.factory = ExtractionStrategyFactory()
 
     def process_with_factory(
-            self,
-            document_type: DocumentType,
-            ocr_type: OCRType,
+        self,
+        document_type: DocumentType,
+        ocr_type: OCRType,
     ):
         strategy = self.factory.get_strategy(document_type, ocr_type)
         return strategy.extract_from_file(pdf_path=self.pdf_path, dpi=self.dpi)

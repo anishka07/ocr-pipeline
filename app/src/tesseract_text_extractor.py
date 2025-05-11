@@ -8,7 +8,6 @@ from app.utils.settings import PathSettings
 
 
 class TesseractExtractionStrategy(OCRStrategy):
-
     def __init__(self):
         self.logger = get_custom_logger(name="TesseractExtractionStrategy")
 
@@ -29,6 +28,6 @@ class TesseractExtractionStrategy(OCRStrategy):
         return full_text
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     a = TesseractExtractionStrategy()
     print(a.extract_from_file(PathSettings.PDF_DIR / "docsumo.pdf"))

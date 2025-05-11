@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 
 from app.core.ocr_processor import OCRProcessor
 from app.models.document import DocumentType
-from app.models.request import OCRType, OCRResponse
+from app.models.request import OCRType, ExtractionResult
 from app.utils.logger import get_custom_logger
 from app.utils.response import gemini_response
 
@@ -28,10 +28,10 @@ async def health_check():
 
 @router.post("/extract/")
 async def extract_data(
-        file: UploadFile = File(...),
-        document_type: DocumentType = Form(...),
-        ocr_type: OCRType = Form(...)
-) ->  OCRResponse:
+    file: UploadFile = File(...),
+    document_type: DocumentType = DocumentType.W9,
+    ocr_type: OCRType = OCRType.tesseract,
+) -> ExtractionResult:
     try:
         suffix = Path(file.filename).suffix if file.filename else ".pdf"
         with NamedTemporaryFile(delete=True, suffix=suffix) as temp_file:
@@ -41,10 +41,11 @@ async def extract_data(
 
             processor = OCRProcessor(pdf_name=temp_path)
             ocr_info = processor.process_with_factory(
-                document_type=document_type,
-                ocr_type=ocr_type
+                document_type=document_type, ocr_type=ocr_type
             )
-            document_info = gemini_response(context=ocr_info, schema=OCRResponse.model_json_schema())
+            document_info = gemini_response(
+                context=ocr_info, schema=ExtractionResult.model_json_schema()
+            )
 
             document_info = json.loads(document_info)
 
@@ -53,6 +54,5 @@ async def extract_data(
     except Exception as e:
         logger.error(f"Error processing document: {str(e)}")
         return JSONResponse(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            content={"error": str(e)}
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={"error": str(e)}
         )

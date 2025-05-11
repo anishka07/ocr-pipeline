@@ -6,12 +6,11 @@ from app.src.easyocr_text_extractor import EasyOCRExtractionStrategy
 
 
 class ExtractionStrategyFactory:
-
     def get_strategy(
-            self,
-            document_type: DocumentType,
-            ocr_type: OCRType,
-    ) ->  OCRStrategy:
+        self,
+        document_type: DocumentType,
+        ocr_type: OCRType,
+    ) -> OCRStrategy:
         if document_type == DocumentType.W9:
             if ocr_type == OCRType.tesseract:
                 return TesseractExtractionStrategy()

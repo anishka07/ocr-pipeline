@@ -24,5 +24,3 @@ class Constants:
             
             Return only the JSON object — DO NOT include any markdown formatting (no triple backticks, no extra text).
 """
-
-

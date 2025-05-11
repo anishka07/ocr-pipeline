@@ -6,10 +6,10 @@ from app.utils.settings import PathSettings
 
 
 def get_custom_logger(
-        name: str,
-        log_dir: str = None,
-        level: int = logging.INFO,
-    ) -> logging.Logger:
+    name: str,
+    log_dir: str = None,
+    level: int = logging.INFO,
+) -> logging.Logger:
     if log_dir is None:
         log_dir = PathSettings.LOG_DIR
 
@@ -23,11 +23,13 @@ def get_custom_logger(
     console_handler.setLevel(level)
     file_handler.setLevel(level)
 
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
     console_handler.setFormatter(formatter)
     file_handler.setFormatter(formatter)
 
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
 
-    return logger 
+    return logger

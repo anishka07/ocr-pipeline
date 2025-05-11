@@ -8,10 +8,9 @@ from app.utils.settings import PathSettings
 
 
 class EasyOCRExtractionStrategy(OCRStrategy):
-
     def __init__(self):
         self.logger = get_custom_logger(name="EasyOCRExtractionStrategy")
-        self.reader = easyocr.Reader(['en'])  # You can add more languages if needed
+        self.reader = easyocr.Reader(["en"])  # You can add more languages if needed
 
     def extract_from_file(self, pdf_path, dpi: int = 300) -> str:
         preprocessor = PDFPreProcessor(pdf_path=pdf_path, dpi=dpi)
@@ -25,7 +24,9 @@ class EasyOCRExtractionStrategy(OCRStrategy):
             cleaned_binary, _ = preprocessor.remove_lines(image)
             result = self.reader.readtext(cleaned_binary)
 
-            page_text = " ".join([text[1] for text in result])  # Join the text extracted from the image
+            page_text = " ".join(
+                [text[1] for text in result]
+            )  # Join the text extracted from the image
             self.logger.info(f"Extracted text from page {i + 1}")
             all_text.append(page_text)
 
@@ -33,6 +34,6 @@ class EasyOCRExtractionStrategy(OCRStrategy):
         return full_text
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     a = EasyOCRExtractionStrategy()
     print(a.extract_from_file(PathSettings.PDF_DIR / "docsumo.pdf"))

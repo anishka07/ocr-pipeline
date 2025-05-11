@@ -1,5 +1,5 @@
 from app.core.strategy_factory import ExtractionStrategyFactory
-from app.models.document import DocumentType, DocumentInfo
+from app.models.document import DocumentType
 from app.models.request import OCRType
 from app.utils.logger import get_custom_logger
 from app.utils.settings import PathSettings
@@ -19,6 +19,6 @@ class OCRProcessor:
             self,
             document_type: DocumentType,
             ocr_type: OCRType,
-    ) -> DocumentInfo:
+    ):
         strategy = self.factory.get_strategy(document_type, ocr_type)
         return strategy.extract_from_file(pdf_path=self.pdf_path, dpi=self.dpi)

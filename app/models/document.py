@@ -9,15 +9,3 @@ class DocumentType(str, Enum):
     GENERIC = "generic"  # Fallback for unknown document types
 
 
-class ExtractionEngineType(str, Enum):
-    TESSERACT = "tesseract"
-    REGEX = "regex"
-
-
-class DocumentInfo:
-    pass
-
-
-class DocumentField:
-    pass
-

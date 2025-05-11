@@ -9,10 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
-.env
 logs
 output
 .idea
 pdfstemp
 temp
-pdfs
+.DS_Store

@@ -8,11 +8,23 @@ class PathSettings:
     APP_DIR = PARENT_DIR / "app"
     PDF_DIR = PARENT_DIR / "pdfs"
     LOG_DIR = PARENT_DIR / "logs"
-    TEMP_FILE_DIR = PARENT_DIR / "temp"
 
 
 class Constants:
-    GEMINI_PROMPT: str = "This is the content from a w9 form: {}, i want you to extract all the relevant field values from this form and return them in a json format. Don't add any extra logic to your response."
-
-
-print(PathSettings.TEMP_FILE_DIR)
+    GEMINI_PROMPT: str = """
+    This is the text extracted from a PDF form:
+    {}
+    Extract in this format: 
+    {{
+        "Name": ,
+        "College": ,
+        "Federal Tax Classification": ,
+        "Exempt payee code": ,
+        "FATCA reporting code": ,
+        "Address": ,
+        "city_state_zip": ,
+        "social_security_number": ,
+        "employer_identification": ,
+    }}
+    If any are missing, fill the field with None
+    """

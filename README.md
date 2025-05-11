@@ -1,11 +1,11 @@
 ### Build the Docker image
 
 ```bash 
-docker build -t docsumo .   
+docker build -t <your_docker_file_name> .   
 ```
 
 ### Run the container
 
 ```bash
-docker run -p 8000:8000 -e GOOGLE_GEMINI_API="<your-api-key>" docsumo   
+docker run -p 8000:8000 -e GOOGLE_GEMINI_API="<your-api-key>" <you_docker_file_name>   
 ```

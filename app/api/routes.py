@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-from fastapi import APIRouter, UploadFile, File, Form, status
+from fastapi import APIRouter, UploadFile, File, status
 from fastapi.responses import JSONResponse
 
 from app.core.ocr_processor import OCRProcessor

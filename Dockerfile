@@ -21,3 +21,4 @@ RUN uv sync
 COPY app .
 
 CMD ["uv", "run", "fastapi", "run"]
+ 

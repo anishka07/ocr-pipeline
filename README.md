@@ -1,3 +1,5 @@
+### An OCR pipeline that shows the implementation of singleton, factory and strategy design patterns.
+
 ### Build the Docker image
 
 ```bash 
